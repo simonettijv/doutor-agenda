@@ -4,9 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { authClient } from "@/lib/auth-client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import z from "zod";
+import { Loader2 } from "lucide-react";
 
 const registerSchema = z.object({
   name: z.string().trim().min(1, { message: "Nome é obrigatório" }),
@@ -24,9 +26,14 @@ const SignUpForm = () => {
     },
   });
 
-    function onSubmit(values: z.infer<typeof registerSchema>) {
-       console.log(values)
-    }
+  async function onSubmit(values: z.infer<typeof registerSchema>) {
+    await authClient.signUp.email({
+      email: values.email,
+      password: values.password,
+      name: values.name,
+      callbackURL: "/dashboard",
+    })
+  }
     return (   <Card>
             <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4" >
@@ -80,7 +87,14 @@ const SignUpForm = () => {
          />
             </CardContent>
             <CardFooter>
-            <Button type="submit" className="w-full">Criar conta</Button>
+            <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}
+            >
+              {form.formState.isSubmitting ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                "Criar conta"
+              )}
+              </Button>
             </CardFooter>
 
             </form>
