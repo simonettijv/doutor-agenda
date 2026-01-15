@@ -1,5 +1,5 @@
 // =========================
-// Drizzle ORM – Schema Organizado
+// Drizzle ORM – Schema Organizado (BetterAuth compatível)
 // =========================
 
 import { relations } from "drizzle-orm";
@@ -32,7 +32,7 @@ export const usersTable = pgTable("users", {
     .notNull(),
 });
 
-export const sessionTable = pgTable(
+export const sessionsTable = pgTable(
   "sessions",
   {
     id: text("id").primaryKey(),
@@ -52,7 +52,7 @@ export const sessionTable = pgTable(
   (t) => [index("sessions_user_id_idx").on(t.userId)],
 );
 
-export const accountTable = pgTable(
+export const accountsTable = pgTable(
   "accounts",
   {
     id: text("id").primaryKey(),
@@ -77,7 +77,7 @@ export const accountTable = pgTable(
   (t) => [index("accounts_user_id_idx").on(t.userId)],
 );
 
-export const verificationTable = pgTable(
+export const verificationsTable = pgTable(
   "verifications",
   {
     id: text("id").primaryKey(),
@@ -94,22 +94,23 @@ export const verificationTable = pgTable(
 );
 
 // Relations – Auth
+
 export const usersRelations = relations(usersTable, ({ many }) => ({
-  sessions: many(sessionTable),
-  accounts: many(accountTable),
+  sessions: many(sessionsTable),
+  accounts: many(accountsTable),
   usersToClinics: many(usersToClinicsTable),
 }));
 
-export const sessionsRelations = relations(sessionTable, ({ one }) => ({
+export const sessionsRelations = relations(sessionsTable, ({ one }) => ({
   user: one(usersTable, {
-    fields: [sessionTable.userId],
+    fields: [sessionsTable.userId],
     references: [usersTable.id],
   }),
 }));
 
-export const accountsRelations = relations(accountTable, ({ one }) => ({
+export const accountsRelations = relations(accountsTable, ({ one }) => ({
   user: one(usersTable, {
-    fields: [accountTable.userId],
+    fields: [accountsTable.userId],
     references: [usersTable.id],
   }),
 }));

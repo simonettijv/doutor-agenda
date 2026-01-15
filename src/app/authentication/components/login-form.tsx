@@ -6,11 +6,12 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2, Router } from "lucide-react";
-import { useRouter } from "next/router";
+import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation"; // ✅ CORRETO
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import z from "zod";
+import { z } from "zod"; // ⚠️ forma correta
+
 
 const loginSchema = z.object({
   email: z.string().trim().min(1, {message: "E-mail é obrigatório" }).email({ message: "E-mail inválido" }),
