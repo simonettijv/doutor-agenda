@@ -8,23 +8,21 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import z from "zod";
 
-const registerSchema = z.object({
-  name: z.string().trim().min(1, { message: "Nome é obrigatório" }),
+const loginSchema = z.object({
   email: z.string().trim().min(1, {message: "E-mail é obrigatório" }).email({ message: "E-mail inválido" }),
   password: z.string().trim().min(8, {message: "A senha deve ter pelo menos 8 caracteres" }),
 });
 
-const SignUpForm = () => {
-    const form = useForm<z.infer<typeof registerSchema>>({
-    resolver: zodResolver(registerSchema),
+const LoginForm = () => {
+    const form = useForm<z.infer<typeof loginSchema>>({
+    resolver: zodResolver(loginSchema),
     defaultValues: {
-       name: "",
        email: "",
        password: "",
     },
   });
 
-    function onSubmit(values: z.infer<typeof registerSchema>) {
+    function onSubmit(values: z.infer<typeof loginSchema>) {
        console.log(values)
     }
     return (   <Card>
@@ -33,25 +31,12 @@ const SignUpForm = () => {
         
         
             <CardHeader>
-              <CardTitle>Criar Conta</CardTitle>
+              <CardTitle>login</CardTitle>
               <CardDescription>
-                Crie uma conta para continuar.
+                Faça login para continuar.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Nome</FormLabel>
-              <FormControl>
-                <Input placeholder="Digite seu nome" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-         />
            <FormField
           control={form.control}
           name="email"
@@ -80,7 +65,7 @@ const SignUpForm = () => {
          />
             </CardContent>
             <CardFooter>
-            <Button type="submit" className="w-full">Criar conta</Button>
+            <Button type="submit" className="w-full">Entrar</Button>
             </CardFooter>
 
             </form>
@@ -88,4 +73,4 @@ const SignUpForm = () => {
           </Card> );
 }
 
-export default SignUpForm
+export default LoginForm
