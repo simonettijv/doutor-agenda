@@ -9,6 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import z from "zod";
 import { Loader2 } from "lucide-react";
+import { useRouter } from "next/router";
 
 const registerSchema = z.object({
   name: z.string().trim().min(1, { message: "Nome é obrigatório" }),
@@ -17,6 +18,7 @@ const registerSchema = z.object({
 });
 
 const SignUpForm = () => {
+    const router = useRouter ();
     const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -31,7 +33,10 @@ const SignUpForm = () => {
       email: values.email,
       password: values.password,
       name: values.name,
-      callbackURL: "/dashboard",
+    }, {
+      onSuccess: () => {
+        router.push("/dashboard")
+      }
     })
   }
     return (   <Card>
