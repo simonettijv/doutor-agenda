@@ -1,9 +1,6 @@
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
-import { db } from "@/db";
-import { eq } from "drizzle-orm";
-import { usersToClinicsTable } from "@/db/schema";
 
 const DashboardPage = async () => {
   const session = await auth.api.getSession({
@@ -12,11 +9,7 @@ const DashboardPage = async () => {
   if (!session?.user) {
     redirect("/authentication")
   }
-  //pegar as clinicas do usuario
-  const clinics = await db.query.usersToClinicsTable.findMany({
-    where: eq(usersToClinicsTable.userId, session.user.id),
-  })
-  if (clinics.length === 0) {
+  if (!session.user.clinic) {
     redirect("/clinic-form");
   }
   return(
