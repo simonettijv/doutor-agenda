@@ -1,44 +1,49 @@
 import { db } from "@/db";
 import { betterAuth } from "better-auth"; 
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import * as schema from "@/db/schema"
-import { customSession } from "better-auth/plugins"
+import * as schema from "@/db/schema";
+import { customSession } from "better-auth/plugins";
 import { eq } from "drizzle-orm";
 import { usersToClinicsTable } from "@/db/schema";
 
 export const auth = betterAuth({
-    database: drizzleAdapter(db, { 
+  database: drizzleAdapter(db, { 
     provider: "pg",
-    usePlural: true,
     schema,
   }),
+
   socialProviders: {
-        google: { 
-            clientId: process.env.GOOGLE_CLIENT_ID as string, 
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET as string, 
-        }, 
-    },
-    plugins: [
-      customSession( async ({ user, session }) => {
-        const clinics =  await db. query.usersToClinicsTable.findMany({
-          where: eq(usersToClinicsTable.userId, user.id),
-          with: {
-            clinic: true
-          }
-        });
-        const clinic = clinics?.[0];
-        return{
-          user: {
-            ...user,
-            clinic: clinic?.clinicId ? {
-              id: clinic?.clinicId,
-              name: clinic?.clinic?.name
-            } : undefined,
-          },
-          session,
-        }
-      }),
-    ],
+    google: { 
+      clientId: process.env.GOOGLE_CLIENT_ID as string, 
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string, 
+    }, 
+  },
+
+  plugins: [
+    customSession(async ({ user, session }) => {
+      const clinics = await db.query.usersToClinicsTable.findMany({
+        where: eq(usersToClinicsTable.userId, user.id),
+        with: {
+          clinic: true,
+        },
+      });
+
+      const clinic = clinics?.[0];
+
+      return {
+        user: {
+          ...user,
+          clinic: clinic?.clinicId
+            ? {
+                id: clinic.clinicId,
+                name: clinic.clinic?.name,
+              }
+            : undefined,
+        },
+        session,
+      };
+    }),
+  ],
 
   user: {
     modelName: "usersTable",
@@ -49,14 +54,14 @@ export const auth = betterAuth({
   },
 
   account: {
-    modelName: "accountsTable"
+    modelName: "accountsTable",
   },
 
   verification: {
-    modelName: "verificationsTable"
+    modelName: "verificationsTable",
   },
 
   emailAndPassword: {
     enabled: true,
   },
-})
+});
