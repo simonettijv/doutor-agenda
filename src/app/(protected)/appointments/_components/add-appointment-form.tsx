@@ -156,10 +156,13 @@ const AddAppointmentForm = ({
     );
     if (!selectedDoctor) return false;
     const dayOfWeek = date.getDay();
-    return (
-      dayOfWeek >= selectedDoctor?.availableFromWeekDay &&
-      dayOfWeek <= selectedDoctor?.availableToWeekDay
-    );
+    const from = selectedDoctor.availableFromWeekDay;
+    const to = selectedDoctor.availableToWeekDay;
+    if (from <= to) {
+      return dayOfWeek >= from && dayOfWeek <= to;
+    } else {
+      return dayOfWeek >= from || dayOfWeek <= to;
+    }
   };
 
   const isDateTimeEnabled = selectedPatientId && selectedDoctorId;

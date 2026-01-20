@@ -1,6 +1,6 @@
 "use client";
 
-import { MoreVerticalIcon, TrashIcon } from "lucide-react";
+import { EditIcon, MoreVerticalIcon, TrashIcon } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
 import { toast } from "sonner";
 
@@ -66,21 +66,30 @@ const AppointmentsTableActions = ({
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
+      {/* 🔧 CORREÇÃO AQUI */}
+      <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="icon">
           <MoreVerticalIcon className="h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
+
       <DropdownMenuContent>
         <DropdownMenuLabel>{appointment.patient.name}</DropdownMenuLabel>
         <DropdownMenuSeparator />
+
+        <DropdownMenuItem onClick={() => console.log("Edit", appointment)}>
+          <EditIcon className="mr-2 h-4 w-4" />
+          Editar
+        </DropdownMenuItem>
+
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-              <TrashIcon />
+              <TrashIcon className="mr-2 h-4 w-4" />
               Excluir
             </DropdownMenuItem>
           </AlertDialogTrigger>
+
           <AlertDialogContent>
             <AlertDialogHeader>
               <AlertDialogTitle>
@@ -91,6 +100,7 @@ const AppointmentsTableActions = ({
                 permanentemente.
               </AlertDialogDescription>
             </AlertDialogHeader>
+
             <AlertDialogFooter>
               <AlertDialogCancel>Cancelar</AlertDialogCancel>
               <AlertDialogAction onClick={handleDeleteAppointmentClick}>

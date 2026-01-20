@@ -57,7 +57,7 @@ export const upsertDoctor = actionClient
     // Preço (ÚNICA correção necessária)
     // -----------------------------
     const appointmentPriceInCents = Math.round(
-      parsedInput.appointmentsPriceInCents * 100
+      parsedInput.appointmentsPriceInCents
     )
 
     // -----------------------------
