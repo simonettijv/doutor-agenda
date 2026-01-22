@@ -1,23 +1,39 @@
 "use server";
 
-import { db } from "@/db";
-import { clinicsTable, usersToClinicsTable } from "@/db/schema";
-import { auth } from "@/lib/auth";
-import { redirect } from "next/navigation";
+import { eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
+import { z } from "zod";
 
-export const createClinic = async (name: string) => {
-    //verificar se o usuario está logado
+import { db } from "@/db";
+import { appointmentsTable } from "@/db/schema";
+import { auth } from "@/lib/auth";
+import { actionClient } from "@/lib/next-safe-actions";
+
+export const deleteAppointment = actionClient
+  .schema(
+    z.object({
+      id: z.string().uuid(),
+    }),
+  )
+  .action(async ({ parsedInput }) => {
     const session = await auth.api.getSession({
-        headers: await headers(),
+      headers: await headers(),
     });
-    if (!session?.user){
-        throw new Error("Usuário não está logado")
+    if (!session?.user) {
+      throw new Error("Unauthorized");
     }
-    const [clinic] = await db.insert(clinicsTable).values({name}).returning();
-    await db.insert(usersToClinicsTable).values({
-        userId: session.user.id,
-        clinicId: clinic.id
+    const appointment = await db.query.appointmentsTable.findFirst({
+      where: eq(appointmentsTable.id, parsedInput.id),
     });
-    redirect("/dashboard")
-}
+    if (!appointment) {
+      throw new Error("Agendamento não encontrado");
+    }
+    if (appointment.clinicId !== session.user.clinic?.id) {
+      throw new Error("Agendamento não encontrado");
+    }
+    await db
+      .delete(appointmentsTable)
+      .where(eq(appointmentsTable.id, parsedInput.id));
+    revalidatePath("/appointments");
+  });

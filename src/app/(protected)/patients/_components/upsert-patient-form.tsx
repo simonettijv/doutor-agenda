@@ -45,9 +45,9 @@ const formSchema = z.object({
   phoneNumber: z.string().trim().min(1, {
     message: "Número de telefone é obrigatório.",
   }),
-  sex: z.enum(["male", "female"]).refine((val) => val !== undefined, {
-  message: "Sexo é obrigatório.",
-}),
+  sex: z.enum(["male", "female"], {
+    message: "Sexo é obrigatório.",
+  }),
 });
 
 interface UpsertPatientFormProps {

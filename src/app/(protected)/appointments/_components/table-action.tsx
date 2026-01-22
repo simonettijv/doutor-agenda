@@ -1,6 +1,6 @@
 "use client";
 
-import { EditIcon, MoreVerticalIcon, TrashIcon } from "lucide-react";
+import { MoreVerticalIcon, TrashIcon } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
 import { toast } from "sonner";
 
@@ -39,7 +39,6 @@ type AppointmentWithRelations = typeof appointmentsTable.$inferSelect & {
     id: string;
     name: string;
     specialty: string;
-    appointmentPriceInCents: number;
   };
 };
 
@@ -66,30 +65,21 @@ const AppointmentsTableActions = ({
 
   return (
     <DropdownMenu>
-      {/* 🔧 CORREÇÃO AQUI */}
-      <DropdownMenuTrigger asChild>
+      <DropdownMenuTrigger>
         <Button variant="ghost" size="icon">
           <MoreVerticalIcon className="h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
-
       <DropdownMenuContent>
         <DropdownMenuLabel>{appointment.patient.name}</DropdownMenuLabel>
         <DropdownMenuSeparator />
-
-        <DropdownMenuItem onClick={() => console.log("Edit", appointment)}>
-          <EditIcon className="mr-2 h-4 w-4" />
-          Editar
-        </DropdownMenuItem>
-
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-              <TrashIcon className="mr-2 h-4 w-4" />
+              <TrashIcon />
               Excluir
             </DropdownMenuItem>
           </AlertDialogTrigger>
-
           <AlertDialogContent>
             <AlertDialogHeader>
               <AlertDialogTitle>
@@ -100,7 +90,6 @@ const AppointmentsTableActions = ({
                 permanentemente.
               </AlertDialogDescription>
             </AlertDialogHeader>
-
             <AlertDialogFooter>
               <AlertDialogCancel>Cancelar</AlertDialogCancel>
               <AlertDialogAction onClick={handleDeleteAppointmentClick}>

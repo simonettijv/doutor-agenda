@@ -8,7 +8,7 @@ import { appointmentsTable } from "@/db/schema";
 
 import AppointmentsTableActions from "./table-action";
 
-export type AppointmentWithRelations = typeof appointmentsTable.$inferSelect & {
+type AppointmentWithRelations = typeof appointmentsTable.$inferSelect & {
   patient: {
     id: string;
     name: string;
@@ -20,7 +20,6 @@ export type AppointmentWithRelations = typeof appointmentsTable.$inferSelect & {
     id: string;
     name: string;
     specialty: string;
-    appointmentPriceInCents: number;
   };
 };
 
@@ -57,11 +56,11 @@ export const appointmentsTableColumns: ColumnDef<AppointmentWithRelations>[] = [
   },
   {
     id: "price",
-    accessorKey: "doctor.appointmentPriceInCents",
+    accessorKey: "appointmentPriceInCents",
     header: "Valor",
     cell: (params) => {
       const appointment = params.row.original;
-      const price = appointment.doctor.appointmentPriceInCents / 100;
+      const price = appointment.appointmentPriceInCents / 100;
       return new Intl.NumberFormat("pt-BR", {
         style: "currency",
         currency: "BRL",

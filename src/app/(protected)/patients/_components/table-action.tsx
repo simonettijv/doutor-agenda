@@ -54,7 +54,7 @@ const PatientsTableActions = ({ patient }: PatientsTableActionsProps) => {
     <>
       <Dialog open={upsertDialogIsOpen} onOpenChange={setUpsertDialogIsOpen}>
         <DropdownMenu>
-          {/* 🔧 CORREÇÃO AQUI: asChild */}
+          {/* ✅ CORREÇÃO AQUI */}
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon">
               <MoreVerticalIcon className="h-4 w-4" />
@@ -66,14 +66,14 @@ const PatientsTableActions = ({ patient }: PatientsTableActionsProps) => {
             <DropdownMenuSeparator />
 
             <DropdownMenuItem onClick={() => setUpsertDialogIsOpen(true)}>
-              <EditIcon className="mr-2 h-4 w-4" />
+              <EditIcon />
               Editar
             </DropdownMenuItem>
 
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                  <TrashIcon className="mr-2 h-4 w-4" />
+                  <TrashIcon />
                   Excluir
                 </DropdownMenuItem>
               </AlertDialogTrigger>
@@ -84,8 +84,8 @@ const PatientsTableActions = ({ patient }: PatientsTableActionsProps) => {
                     Tem certeza que deseja deletar esse paciente?
                   </AlertDialogTitle>
                   <AlertDialogDescription>
-                    Essa ação não pode ser revertida. Isso irá deletar o paciente
-                    e todas as consultas agendadas.
+                    Essa ação não pode ser revertida. Isso irá deletar o
+                    paciente e todas as consultas agendadas.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
 
