@@ -127,7 +127,7 @@ const UpsertDoctorForm = ({
       id: doctor?.id,
       availableFromWeekDay: parseInt(values.availableFromWeekDay),
       availableToWeekDay: parseInt(values.availableToWeekDay),
-      appointmentsPriceInCents: values.appointmentPrice * 100,
+      appointmentPriceInCents: values.appointmentPrice * 100,
     });
   };
 
