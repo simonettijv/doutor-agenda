@@ -1,1 +1,0 @@
-ALTER TABLE "appointments" ADD COLUMN "appointment_price_in_cents" integer NOT NULL;
